@@ -1,29 +1,4 @@
-const inquirer = require("inquirer");
-const fs = require("fs");
-const util = require("util");
-const writeFileAsync = util.promisify(fs.writeFile);
-
-
-// function: prompt username and favorite color
-function promptUser() {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "username",
-            message: "What is your Github username?"
-        },
-        {
-            type: "list",
-            name: "color",
-            message: "What is your favorite color?",
-            choices: [ "black", "white" , "blue" , "red" , "orange", "purple" , "green"]
-        }
-    ]);
-}
-
-// function: generate html from answers
-function htmlProfile(answers) {
-    return ` 
+ 
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +16,7 @@ function htmlProfile(answers) {
             </div>
             <div class="col-sm-8">
                 <div class="row">
-                    <div class="col-sm"><h1>${answers.username}</h1></div> <!--github username-->
+                    <div class="col-sm"><h1>lmalexander</h1></div> <!--github username-->
                 </div>
                 <div class="row">
                     <div class="col-sm"><h4>Location</h4></div> <!--user location-->
@@ -100,20 +75,4 @@ function htmlProfile(answers) {
         </div>
     </div>
 </body>
-</html>`;
-}
-
-// function: print html to pdf
-
-
-
-// function calls
-promptUser()
-    .then(function(answers) {
-        console.log(answers.username);
-        const html = htmlProfile(answers);
-        return writeFileAsync("index.html", html);
-    })
-    .catch(function(err) {
-        console.log(err);
-    });
+</html>
