@@ -3,6 +3,9 @@ const fs = require("fs");
 const util = require("util");
 const moment = require("moment");
 const path = require("path");
+const pdf = require("html-pdf");
+const html = fs.readFileSync("index.html","utf8");
+const options = { format: "Letter"};
 const writeFileAsync = util.promisify(fs.writeFile);
 
 
@@ -106,6 +109,10 @@ function htmlProfile(answers) {
 }
 
 // function: print html to pdf
+pdf.create(html,options).toFile("index.pdf", function(err, res) {
+    if (err) return console.log(err);
+    console.log(res);
+});
 
 // function calls
 promptUser()
