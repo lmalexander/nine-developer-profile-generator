@@ -1,6 +1,8 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const util = require("util");
+const moment = require("moment");
+const path = require("path");
 const writeFileAsync = util.promisify(fs.writeFile);
 
 
@@ -105,8 +107,6 @@ function htmlProfile(answers) {
 
 // function: print html to pdf
 
-
-
 // function calls
 promptUser()
     .then(function(answers) {
@@ -114,6 +114,7 @@ promptUser()
         const html = htmlProfile(answers);
         return writeFileAsync("index.html", html);
     })
+    
     .catch(function(err) {
         console.log(err);
     });
