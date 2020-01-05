@@ -26,35 +26,35 @@ function promptUser() {
     ]);
 }
 
-// perform github api await/async call using axios & store github data variables
+// perform github api await/async call using axios
 async function githubUser(answers) {
     try {
         const githubURL = `https://api.github.com/users/${answers.username}`;
         const githubUserData = await axios.get(githubURL);
         return githubUserData;
-        console.log(githubUserData);
+ //     console.log(githubUserData);
     } catch (error) {
         console.error(error);
     }
 }
 
-// create const html storing htmlProfile which creates HTML
+// function htmlProfile to create HTML
 function htmlProfile(answers, githubUserData) {
     // storing github data variables
-    const userName = githubUserData.name;
+    const userName = githubUserData.data.name;
     console.log(userName);
-    const userGitName = githubUserData.login;
-    const userLocation = githubUserData.location;
-    const userGithubLink = githubUserData.html_url;
-    const userBlogLink = githubUserData.blog;
-    const userProfImg = githubUserData.avatar_url;
+    const userGitName = githubUserData.data.login;
+    const userLocation = githubUserData.data.location;
+    const userGithubLink = githubUserData.data.html_url;
+    const userBlogLink = githubUserData.data.blog;
+    const userProfImg = githubUserData.data.avatar_url;
     console.log(userProfImg);
-    const userBio = githubUserData.bio;
-    const userRepos = githubUserData.public_repos;
-    const userCreated = githubUserData.created_at;
+    const userBio = githubUserData.data.bio;
+    const userRepos = githubUserData.data.public_repos;
+    const userCreated = githubUserData.data.created_at;
     const userCreatedFormat = moment(userCreated).format("MMMM YYYY");
-    const userFollowers = githubUserData.followers;
-    const userFollowing = githubUserData.following;
+    const userFollowers = githubUserData.data.followers;
+    const userFollowing = githubUserData.data.following;
 
     const colors = {
         green: {
@@ -63,19 +63,19 @@ function htmlProfile(answers, githubUserData) {
             headerColor: "black",
             photoBorderColor: "#black"
             },
-            blue: {
+        blue: {
             wrapperBackground: "#5F64D3",
             headerBackground: "#26175A",
             headerColor: "white",
             photoBorderColor: "#73448C"
             },
-            pink: {
+        pink: {
             wrapperBackground: "#879CDF",
             headerBackground: "#FF8374",
             headerColor: "white",
             photoBorderColor: "#FEE24C"
             },
-            red: {
+        red: {
             wrapperBackground: "#DE9967",
             headerBackground: "#870603",
             headerColor: "white",
@@ -83,7 +83,7 @@ function htmlProfile(answers, githubUserData) {
             }
     };
     
-    // generate html from github api response data
+    // generate html with template literals
     return `  
         <!DOCTYPE html>
     <html lang="en">
@@ -279,17 +279,17 @@ function htmlProfile(answers, githubUserData) {
 async function writeFile(html) {
  return await writeFileAsync("index.html", html) 
 }
-
-// pdf.create(html,options).toFile("index.pdf", function(err, res) {
-//     if (err) return console.log(err);
-//     console.log(res);
-// });
+// convert html to PDF *npm has security vulnerabilities*
+pdf.create(html,options).toFile("index.pdf", function(err, res) {
+    if (err) return console.log(err);
+    console.log(res);
+});
 
 // function calls
 promptUser()
     .then(answers => githubUser(answers)
         .then(function(githubUserData){
-            console.log(githubUserData);
+//         console.log(githubUserData);
             const html = htmlProfile(answers, githubUserData)
             writeFile(html)
         }
